@@ -1,0 +1,202 @@
+"use client";
+
+import { use, useState, useEffect, act } from "react";
+
+import { redirect } from "next/navigation";
+
+import { authClient } from "@/lib/auth-client";
+
+import { Button, Card, Form, Input, Label, Modal, toast } from "@heroui/react"
+
+export default function Page({ params }: { params: Promise<{ slug: string }> }) {
+    const { slug } = use(params);
+
+    const {
+        data: session,
+        isPending,
+        error,
+        refetch
+    } = authClient.useSession();
+
+    if (!session && !isPending) {
+        redirect("../signin");
+    };
+
+    const [activity, setActivity] = useState<any>({});
+    const [ratings, setRatings] = useState([]);
+
+    function getActivity() {
+        fetch("../api/activities", {
+            method: "GET",
+            body: JSON.stringify({
+                id: slug
+            })
+        })
+        .then(res => {
+            if (!res.ok) {
+                throw new Error("Response was not ok");
+            };
+
+            return res.json();
+        })
+        .then(json => {
+            setActivity(json["activity"]);
+        })
+        .catch(e => {
+            console.error(e);
+
+            toast("Something went wrong getting activity info", {
+                actionProps: {
+                    variant: "danger"
+                }
+            });
+        });
+    };
+
+    function getRatings() {
+        fetch("../api/ratings", {
+            method: "GET",
+            body: JSON.stringify({
+                activityId: activity["id"]
+            })
+        })
+        .then(res => {
+            if (!res.ok) {
+                throw new Error("Response was not ok");
+            };
+
+            return res.json();
+        })
+        .then(json => {
+            setRatings(json["ratings"]);
+        })
+        .catch(e => {
+            console.error(e);
+
+            return toast("Something went wrong getting ratings", {
+                actionProps: {
+                    variant: "danger"
+                }
+            });
+        });
+    };
+
+    function creatRating(e: React.SyntheticEvent<HTMLFormElement>): void {
+        e.preventDefault();
+
+        const formData = new FormData(e.currentTarget);
+
+        const title: string|undefined = formData.get("title")?.toString();
+        const description: string|undefined = formData.get("description")?.toString();
+        const rating: number|undefined = Number(formData.get("rating")?.toString());
+
+        if (!title || title.trim().length === 0) {
+            toast("That is not a valid title", {
+                actionProps: {
+                    variant: "danger"
+                }
+            });
+
+            return;
+        };
+
+        if (!description || description.trim().length === 0) {
+            toast("That is not a valid description", {
+                actionProps: {
+                    variant: "danger"
+                }
+            });
+
+            return;
+        };
+
+        if (!rating || Number.isNaN(rating) || rating < 0 || rating > 10) {
+            toast("That is not a valid rating", {
+                actionProps: {
+                    variant: "danger"
+                }
+            });
+
+            return;
+        };
+
+        fetch("../api/ratings", {
+            method: "POST",
+            body: JSON.stringify({
+                activity: Number(slug),
+                title: title,
+                description: description,
+                rating: rating
+            })
+        })
+        .then(res => {
+            if (!res.ok) {
+                throw new Error("Response was not ok");
+            };
+        })
+        .catch(e => {
+            console.error(e);
+
+            toast("Something went wrong adding rating", {
+                actionProps: {
+                    variant: "danger"
+                }
+            });
+        });
+    };
+
+    useEffect(() => {
+        getActivity();
+    }, []);
+
+    useEffect(() => {
+        if (activity) {
+            getRatings();
+        };
+    }, [activity]);
+
+    return (
+        <div>
+            <h1>{activity["title"]}</h1>
+            <p>{activity["description"]}</p>
+
+            <h2>Ratings</h2>
+            <Modal>
+                <Button>Add Rating</Button>
+
+                <Modal.Backdrop>
+                    <Modal.Container>
+                        <Modal.Dialog>
+                            <Modal.CloseTrigger />
+                            <Modal.Header>Add a rating</Modal.Header>
+                            <Modal.Body>
+                                <Form onSubmit={creatRating}>
+                                    <Label htmlFor="title">Title:</Label>
+                                    <Input type="text" id="title" name="title" />
+
+                                    <Label htmlFor="description">Description:</Label>
+                                    <Input type="text" id="description" name="description" />
+
+                                    <Label htmlFor="rating">Rating:</Label>
+                                    <Input type="number" max="5" min="0" id="rating" name="rating" />
+
+                                    <Button type="submit">Add Rating</Button>
+                                </Form>
+                            </Modal.Body>
+                        </Modal.Dialog>
+                    </Modal.Container>
+                </Modal.Backdrop>
+            </Modal>
+
+            {ratings.map((rating) => (
+                <Card key={rating["id"]}>
+                    <Card.Title>{rating["title"]}</Card.Title>
+                    <Card.Description>
+                        <p>{rating["rating"]}/5 - {rating["userid"]}</p>
+                        {rating["description"]}
+                    </Card.Description>
+                </Card>
+            ))}
+        </div>
+    );
+};

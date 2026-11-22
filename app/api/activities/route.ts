@@ -27,12 +27,14 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
         )
     } catch (e) {
         console.error(e);
-    };
 
-    return NextResponse.json(
-        {},
-        { status: 200 }
-    );
+        return NextResponse.json(
+            {
+                "error": "Something went wrong getting activities"
+            },
+            { status: 500 }
+        )
+    };
 };
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
