@@ -9,17 +9,23 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@heroui/react": "^3.2.7",
+    "@heroui/styles": "^3.2.7",
+    "better-auth": "^1.7.27",
+    "next": "16.3.1",
+    "pg": "^8.23.1",
+    "postgres": "^4.1.1",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "next": "16.3.1"
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@eslint/eslintrc": "^3",
     "@types/node": "^20",
+    "@types/pg": "^8.23.1",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.3.1",
-    "@eslint/eslintrc": "^3"
+    "typescript": "^5"
   }
 }
