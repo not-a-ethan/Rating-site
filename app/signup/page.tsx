@@ -4,7 +4,7 @@ import { Label, Input, Button } from "@heroui/react";
 
 import { authClient } from "../../lib/auth-client";
 
-export function Page() {
+export default function Page() {
 
     async function handleSignUp(e: React.SyntheticEvent<HTMLFormElement>) {
         e.preventDefault();
