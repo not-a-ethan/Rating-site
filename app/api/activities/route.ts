@@ -94,6 +94,8 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         );
     };
 
+    // Limit to admins
+
     const userId: string = session["session"]["userId"];
 
     const body = await req.json();
@@ -148,6 +150,8 @@ export async function PUT(req: NextRequest): Promise<NextResponse> {
             { status: 403 }
         );
     };
+
+    // Limit to admins
 
     const userId: string = session["session"]["userId"];
 
@@ -243,6 +247,8 @@ export async function DELETE(req: NextRequest): Promise<NextResponse> {
             { status: 403 }
         );
     };
+
+    // Limit to admins
 
     const userId: string = session["session"]["userId"];
 

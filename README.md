@@ -2,6 +2,8 @@
 
 Ability to rate diffrent activities
 
+You can test it at https://rating-site-rho.vercel.app/
+
 ## Dev
 
 ### SQL Tables
