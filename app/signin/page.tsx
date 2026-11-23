@@ -25,13 +25,15 @@ export default function Page() {
         <div className="page">
             <h1>Sign in</h1>
 
-            <Label htmlFor="username">Username:</Label>
-            <Input type="text" id="username" name="username" />
+            <form onSubmit={handleSignIn}>
+                <Label htmlFor="username">Username:</Label>
+                <Input type="text" id="username" name="username" />
 
-            <Label htmlFor="password">Password:</Label>
-            <Input type="password" id="password" name="password" />
+                <Label htmlFor="password">Password:</Label>
+                <Input type="password" id="password" name="password" />
 
-            <Button type="submit">Sign In</Button>
+                <Button type="submit">Sign In</Button>
+            </form>
         </div>
     );
 };
