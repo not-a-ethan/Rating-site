@@ -24,6 +24,7 @@ export default function Page({ params }: { params: Promise<{ slug: string }> }) 
 
     const [activity, setActivity] = useState<any>({});
     const [ratings, setRatings] = useState([]);
+    const [users, setUsers] = useState({});
 
     function getActivity() {
         fetch(`../api/activities?id=${slug}`, {
@@ -62,6 +63,7 @@ export default function Page({ params }: { params: Promise<{ slug: string }> }) 
             return res.json();
         })
         .then(json => {
+            setUsers(json["users"]);
             setRatings(json["ratings"]);
         })
         .catch(e => {
@@ -188,7 +190,7 @@ export default function Page({ params }: { params: Promise<{ slug: string }> }) 
                 <Card key={rating["id"]}>
                     <Card.Title>{rating["title"]}</Card.Title>
                     <Card.Description>
-                        {rating["rating"]}/5 - {rating["userid"]}
+                        {rating["rating"]}/5 - {users[rating["userid"]]}
 
                         <br />
                         

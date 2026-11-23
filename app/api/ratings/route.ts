@@ -43,9 +43,51 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
         )
     };
 
+    let userIds = [];
+
+    for (let i = 0; i < ratings.length; i++) {
+        userIds.push(ratings[i]["userid"]);
+    };
+
+    const users: any = {};
+
+    try {
+        let queryStatment = ``;
+
+        for (let i = 0; i < userIds.length; i++) {
+            const thisUser = await sql`SELECT * FROM "user" WHERE id=${userIds[i]};`;
+
+            users[userIds[i]] = thisUser[0]["name"];
+        };
+
+        /*
+        queryStatment = queryStatment.substring(0, queryStatment.length - 4);
+
+        queryStatment = `SELECT * FROM "user" WHERE ${queryStatment};`
+
+        console.log(queryStatment);
+
+        const userResponse = await sql`${queryStatment}`;
+        
+        for (let i = 0; i < userResponse.length; i++) {
+            users[userResponse[i]["id"]] = userResponse[i]["name"];
+        };
+        */
+    } catch (e) {
+        console.error(e);
+
+        return NextResponse.json(
+            {
+                "error": "Something went wrong getting users"
+            },
+            { status: 500 }
+        );
+    };
+
     return NextResponse.json(
         {
-            ratings: ratings
+            ratings: ratings,
+            users: users
         },
         { status: 200 }
     );
