@@ -8,6 +8,8 @@ import { authClient } from "@/lib/auth-client";
 
 import { Card, Link, toast } from "@heroui/react";
 
+import { ActivitiesTable } from "@/utils/types";
+
 export default function Page() {
     const {
         data: session,
@@ -20,9 +22,9 @@ export default function Page() {
         redirect("/signin");
     };
 
-    const [activities, setActivities] = useState([]);
+    const [activities, setActivities] = useState<ActivitiesTable[]>([]);
 
-    function getActivities() {
+    function getActivities(): void {
         fetch("../api/activities")
         .then(res => {
             if (!res.ok) {

@@ -4,6 +4,8 @@ import { headers } from "next/headers";
 import { auth } from "@/utils/auth";
 import { sql } from "@/utils/sql";
 
+import { ActivitiesTable } from "@/utils/types";
+
 export async function GET(req: NextRequest): Promise<NextResponse> {
     const session = await auth.api.getSession({ headers: await headers() });
 
@@ -30,7 +32,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
         };
 
         try {
-            const activity = await sql`SELECT * FROM activities WHERE id=${id};`;
+            const activity: ActivitiesTable[] = await sql`SELECT * FROM activities WHERE id=${id};`;
 
             if (activity.length === 0) {
                 return NextResponse.json(
@@ -60,7 +62,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     };
 
     try {
-        const activities = await sql`SELECT * FROM activities;`;
+        const activities: ActivitiesTable[] = await sql`SELECT * FROM activities;`;
 
         return NextResponse.json(
             {
@@ -164,7 +166,7 @@ export async function PUT(req: NextRequest): Promise<NextResponse> {
     };
 
     try {
-        const activity = await sql`SELECT * FROM activities WHERE id=${id};`;
+        const activity: ActivitiesTable[] = await sql`SELECT * FROM activities WHERE id=${id};`;
 
         if (activity.length === 0) {
             return NextResponse.json(
@@ -257,7 +259,7 @@ export async function DELETE(req: NextRequest): Promise<NextResponse> {
     };
 
     try {
-        const activity = await sql`SELECT * FROM activities WHERE id=${id};`;
+        const activity: ActivitiesTable[] = await sql`SELECT * FROM activities WHERE id=${id};`;
 
         if (activity.length === 0) {
             return NextResponse.json(

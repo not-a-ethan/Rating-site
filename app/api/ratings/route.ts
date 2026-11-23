@@ -5,6 +5,8 @@ import { auth } from "../../../utils/auth";
 
 import { sql } from "../../../utils/sql";
 
+import { ActivitiesTable, RatingsTable, UserTable } from "@/utils/types";
+
 export async function GET(req: NextRequest): Promise<NextResponse> {
     const session = await auth.api.getSession({ headers: await headers() });
 
@@ -29,7 +31,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
         );
     };
 
-    let ratings;
+    let ratings: RatingsTable[];
 
     try {
         ratings = await sql`SELECT * FROM ratings WHERE activity=${activityId};`;
@@ -52,27 +54,11 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     const users: any = {};
 
     try {
-        let queryStatment = ``;
-
         for (let i = 0; i < userIds.length; i++) {
-            const thisUser = await sql`SELECT * FROM "user" WHERE id=${userIds[i]};`;
+            const thisUser: UserTable[] = await sql`SELECT * FROM "user" WHERE id=${userIds[i]};`;
 
             users[userIds[i]] = thisUser[0]["name"];
         };
-
-        /*
-        queryStatment = queryStatment.substring(0, queryStatment.length - 4);
-
-        queryStatment = `SELECT * FROM "user" WHERE ${queryStatment};`
-
-        console.log(queryStatment);
-
-        const userResponse = await sql`${queryStatment}`;
-        
-        for (let i = 0; i < userResponse.length; i++) {
-            users[userResponse[i]["id"]] = userResponse[i]["name"];
-        };
-        */
     } catch (e) {
         console.error(e);
 
@@ -150,7 +136,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     };
 
     try {
-        const activity = await sql`SELECT * FROM activities WHERE id=${activityId};`;
+        const activity: ActivitiesTable[] = await sql`SELECT * FROM activities WHERE id=${activityId};`;
 
         if (activity.length === 0) {
             return NextResponse.json(
@@ -220,7 +206,7 @@ export async function PUT(req: NextRequest): Promise<NextResponse> {
     };
 
     try {
-        const rating = await sql`SELECT* FROM ratings WHERE id=${id};`;
+        const rating: RatingsTable[] = await sql`SELECT* FROM ratings WHERE id=${id};`;
 
         if (rating.length === 0) {
             return NextResponse.json(
@@ -327,7 +313,7 @@ export async function DELETE(req: NextRequest): Promise<NextResponse> {
     };
 
     try {
-        const rating = await sql`SELECT * FROM ratings WHERE id=${ratingId};`;
+        const rating: RatingsTable[] = await sql`SELECT * FROM ratings WHERE id=${ratingId};`;
 
         if (rating.length === 0) {
             return NextResponse.json(

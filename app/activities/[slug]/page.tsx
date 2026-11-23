@@ -1,12 +1,14 @@
 "use client";
 
-import { use, useState, useEffect, act } from "react";
+import { use, useState, useEffect } from "react";
 
 import { redirect } from "next/navigation";
 
+import { Button, Card, Form, Input, Label, Modal, toast } from "@heroui/react";
+
 import { authClient } from "@/lib/auth-client";
 
-import { Button, Card, Form, Input, Label, Modal, toast } from "@heroui/react";
+import { RatingsTable, ActivitiesTable } from "@/utils/types";
 
 export default function Page({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = use(params);
@@ -22,11 +24,15 @@ export default function Page({ params }: { params: Promise<{ slug: string }> }) 
         redirect("../signin");
     };
 
-    const [activity, setActivity] = useState<any>({});
-    const [ratings, setRatings] = useState([]);
-    const [users, setUsers] = useState({});
+    interface usersInterace {
+        [key: string]: string
+    };
 
-    function getActivity() {
+    const [activity, setActivity] = useState<ActivitiesTable>();
+    const [ratings, setRatings] = useState<RatingsTable[]>([]);
+    const [users, setUsers] = useState<usersInterace>({});
+
+    function getActivity(): void {
         fetch(`../api/activities?id=${slug}`, {
             method: "GET"
         })
@@ -51,7 +57,11 @@ export default function Page({ params }: { params: Promise<{ slug: string }> }) 
         });
     };
 
-    function getRatings() {
+    function getRatings(): void {
+        if (!activity) {
+            return;
+        };
+
         fetch(`../api/ratings?activityId=${activity["id"]}`, {
             method: "GET"
         })
@@ -147,8 +157,6 @@ export default function Page({ params }: { params: Promise<{ slug: string }> }) 
 
     useEffect(() => {
         if (activity && JSON.stringify(activity) !== JSON.stringify({})) {
-            console.log(activity);
-
             getRatings();
         };
     }, [activity]);
