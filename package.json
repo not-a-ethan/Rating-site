@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@heroui/react": "^3.2.7",
+    "@heroui/react": "^3.2.8",
     "@heroui/styles": "^3.2.7",
     "better-auth": "^1.7.14",
     "next": "16.4.6",
