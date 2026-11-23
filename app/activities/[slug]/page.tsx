@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 
 import { authClient } from "@/lib/auth-client";
 
-import { Button, Card, Form, Input, Label, Modal, toast } from "@heroui/react"
+import { Button, Card, Form, Input, Label, Modal, toast } from "@heroui/react";
 
 export default function Page({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = use(params);
@@ -188,7 +188,10 @@ export default function Page({ params }: { params: Promise<{ slug: string }> }) 
                 <Card key={rating["id"]}>
                     <Card.Title>{rating["title"]}</Card.Title>
                     <Card.Description>
-                        <p>{rating["rating"]}/5 - {rating["userid"]}</p>
+                        {rating["rating"]}/5 - {rating["userid"]}
+
+                        <br />
+                        
                         {rating["description"]}
                     </Card.Description>
                 </Card>
