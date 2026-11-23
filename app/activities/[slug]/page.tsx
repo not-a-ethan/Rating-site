@@ -10,6 +10,8 @@ import { authClient } from "@/lib/auth-client";
 
 import { RatingsTable, ActivitiesTable } from "@/utils/types";
 
+import styles from "./page.module.css";
+
 export default function Page({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = use(params);
 
@@ -162,7 +164,7 @@ export default function Page({ params }: { params: Promise<{ slug: string }> }) 
     }, [activity]);
 
     return (
-        <div>
+        <div className={`${styles.page}`}>
             <h1>{activity ? activity["name"] : ""}</h1>
             <p>{activity ? activity["description"] : ""}</p>
 

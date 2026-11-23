@@ -4,11 +4,13 @@ import { useState, useEffect } from "react";
 
 import { redirect } from "next/navigation";
 
-import { authClient } from "@/lib/auth-client";
-
 import { Card, Link, toast } from "@heroui/react";
 
+import { authClient } from "@/lib/auth-client";
+
 import { ActivitiesTable } from "@/utils/types";
+
+import styles from "./page.module.css";
 
 export default function Page() {
     const {
@@ -50,7 +52,7 @@ export default function Page() {
     useEffect(getActivities, []);
 
     return (
-        <div>
+        <div className={`${styles.page}`}>
             <h1>Activities</h1>
 
             <div className="grid">
