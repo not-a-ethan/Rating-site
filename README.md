@@ -1,6 +1,6 @@
 # Rating Site
 
-Ability to rate diffrent activities
+Ability to rate diffrent activities. This project is meant to be used by orgs. For example if an amusment park uses it each ride would be a diffrent activity.
 
 You can test it at https://rating-site-rho.vercel.app/
 
