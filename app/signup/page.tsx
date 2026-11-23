@@ -21,7 +21,7 @@ export default function Page() {
             name: username,
             username: username,
             password: password,
-            callbackURL: "/dashboard"
+            callbackURL: "/activities"
         });
     };
 

@@ -17,7 +17,8 @@ export default function Page() {
 
         const { data, error } = await authClient.signIn.username({
             username: username,
-            password: password
+            password: password,
+            callbackURL: "/activities"
         });
     };
 
