@@ -26,11 +26,8 @@ export default function Page({ params }: { params: Promise<{ slug: string }> }) 
     const [ratings, setRatings] = useState([]);
 
     function getActivity() {
-        fetch("../api/activities", {
-            method: "GET",
-            body: JSON.stringify({
-                id: slug
-            })
+        fetch(`../api/activities?id=${slug}`, {
+            method: "GET"
         })
         .then(res => {
             if (!res.ok) {
@@ -54,11 +51,8 @@ export default function Page({ params }: { params: Promise<{ slug: string }> }) 
     };
 
     function getRatings() {
-        fetch("../api/ratings", {
-            method: "GET",
-            body: JSON.stringify({
-                activityId: activity["id"]
-            })
+        fetch(`../api/ratings?activityId=${activity["id"]}`, {
+            method: "GET"
         })
         .then(res => {
             if (!res.ok) {
@@ -150,15 +144,17 @@ export default function Page({ params }: { params: Promise<{ slug: string }> }) 
     }, []);
 
     useEffect(() => {
-        if (activity) {
+        if (activity && JSON.stringify(activity) !== JSON.stringify({})) {
+            console.log(activity);
+
             getRatings();
         };
     }, [activity]);
 
     return (
         <div>
-            <h1>{activity["title"]}</h1>
-            <p>{activity["description"]}</p>
+            <h1>{activity ? activity["name"] : ""}</h1>
+            <p>{activity ? activity["description"] : ""}</p>
 
             <h2>Ratings</h2>
             <Modal>

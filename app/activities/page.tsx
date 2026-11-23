@@ -53,7 +53,7 @@ export default function Page() {
 
             <div className="grid">
                 {activities.map((activity) => (
-                    <Link key={activity["id"]} href={`./${activity["id"]}`}>
+                    <Link key={activity["id"]} href={`/activities/${activity["id"]}`}>
                         <Card>
                             <Card.Header>
                                 <Card.Title>{activity["name"]}</Card.Title>

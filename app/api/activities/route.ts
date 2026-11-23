@@ -16,6 +16,49 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
         );
     };
 
+    const searchParams: any = req.nextUrl.searchParams;
+    const id: number = Number(searchParams.get("id"));
+
+    if (id) {
+        if (Number.isNaN(id) || id < 1) {
+            return NextResponse.json(
+                {
+                    "error": "That is not a valid id"
+                },
+                { status: 400 }
+            );
+        };
+
+        try {
+            const activity = await sql`SELECT * FROM activities WHERE id=${id};`;
+
+            if (activity.length === 0) {
+                return NextResponse.json(
+                    {
+                        "error": "Activity not found"
+                    },
+                    { status: 404 }
+                );
+            };
+
+            return NextResponse.json(
+                {
+                    "activity": activity[0]
+                },
+                { status: 200 }
+            );
+        } catch (e) {
+            console.error(e);
+
+            return NextResponse.json(
+                {
+                    "error": "Something went wrong getting activity info"
+                },
+                { status: 500 }
+            );
+        };
+    };
+
     try {
         const activities = await sql`SELECT * FROM activities;`;
 

@@ -17,8 +17,8 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
         );
     };
 
-    const body: any = await req.json();
-    const activityId: number = body["activityId"];
+    const searchParams: any = req.nextUrl.searchParams;
+    const activityId: number = Number(searchParams.get("activityId"));    
 
     if (!activityId || Number.isNaN(activityId) || activityId < 1) {
         return NextResponse.json(
@@ -130,7 +130,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     };
 
     try {
-        await sql`INSERT INTO ratings (activity, title, description, ratings, userid) VALUES (${activityId}, ${title}, ${description}, ${rating}, ${userId});`;
+        await sql`INSERT INTO ratings (activity, title, description, rating, userid) VALUES (${activityId}, ${title}, ${description}, ${rating}, ${userId});`;
     } catch (e) {
         console.error(e);
 
